@@ -4,35 +4,37 @@
 ### ***Create a new GitHub organization***
 - Fork the GitOps Repository Structure and clone them to your local machine 
 ### Set up GitOps
-    
-    oc login --token=<token> --server=<server>
-    
-Then navigate to the main repo
+
+ navigate to the main repo
 
     cd multi-tenancy-gitops
-
-Install ArgoCD into the cluster
+  
+ login to your cluster
+ 
+    oc login --token=<token> --server=<server>
+    
+ Install ArgoCD into the cluster
 
     oc apply -f setup/ocp4x/
     
-Delete default ArgoCD instance
+ Delete default ArgoCD instance
 
 As we'll see in a moment, the default instance of ArgoCD, created when we install the operator, isn't sufficient; we have to create a new one. But before we do this, we have to delete the default instance of ArgoCD.
 
     oc delete gitopsservice cluster || true
     
-Create a custom ArgoCD instance
+ Create a custom ArgoCD instance
 Now let's create the custom ArgoCD instance using this YAML.
 
     oc apply -f setup/ocp4x/argocd-instance/ -n openshift-gitops
 
-Launch ArgoCD
+ Launch ArgoCD
 
 ArgoCD can be accessed via an OpenShift route. Using a browser, navigate to the URL returned by following command:
 
     oc get route openshift-gitops-cntk-server -n openshift-gitops -o jsonpath='{"https://"}{.spec.host}{"\n"}'
 
-Login to ArgoCD
+ Login to ArgoCD
 use admin for the username and retrieve the password from the appropriate Kubernetes secret. Use the following command to retrieve the password:
 
     oc extract secret/openshift-gitops-cntk-cluster -n openshift-gitops --keys="admin.password" --to=-
