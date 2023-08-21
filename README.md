@@ -39,6 +39,25 @@ use admin for the username and retrieve the password from the appropriate Kubern
 
     oc extract secret/openshift-gitops-cntk-cluster -n openshift-gitops --keys="admin.password" --to=-
 
+Set your git branch and organization 
+
+    export GIT_BRANCH=master
+    export GIT_ORG=< your organization name >
+
+Run the customization script
+
+    ./scripts/set-git-source.sh
+    
+Commit the changes and push to git
+
+    git add .
+    git commit -s -m "GitOps customizations for organization and cluster"
+    git push
+
+Apply ArgoCD bootstrap.yaml to the cluster
+
+    oc apply -f 0-bootstrap/single-cluster/bootstrap.yaml
+    
 ## GitOps Repository Structure
 There are a total of 4 Git repositories involved with the GitOps workflow.
 
